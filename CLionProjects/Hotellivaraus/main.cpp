@@ -17,8 +17,9 @@ int randomizerWithMinMax(int min, int max) { //random generaattori joka arpoo ra
 }
 
 
-const int numberOfRooms = randomizerWithMinMax(20,  150) *  // Luodaan satunnainen määrä huoneita hotelliin väliltä 40 - 300
-                          2; // Lähetetään puolet halutusta ja tuplataan lopputulos saadaksemme parillisen luvun
+const int numberOfRooms =
+        randomizerWithMinMax(20, 150) *  // Luodaan satunnainen määrä huoneita hotelliin väliltä 40 - 300
+        2; // Lähetetään puolet halutusta ja tuplataan lopputulos saadaksemme parillisen luvun
 const int halfRooms = numberOfRooms / 2;
 vector<Room> rooms(numberOfRooms);  //Vektorimme, jossa säilömme huoneobjektejamme
 
@@ -26,7 +27,7 @@ void empty() { // Printtaa tyhjä line
     cout << endl;
 }
 
-bool availabilityChecker(int roomtype) {  // checkeri jolla selvitetään onko huonetyyppiä 1 tai 2 vapaana.
+bool availabilityChecker(int roomtype) {  // Checkeri jolla selvitetään onko huonetyyppiä 1 tai 2 vapaana.
     if (roomtype == 1) {
         for (int i = 1; i <= halfRooms; i++) {
             if (rooms[i].available) {
@@ -62,13 +63,16 @@ int calculatePrice(float nights, float price,
     return nights * price * (1 - (discount / 100));
 }
 
-bool testForInt(string input) {   // Kokeilee onko käyttäjän syöte numero
-    try {
-        stoi(input);
-        return true;
-    } catch (invalid_argument const &e) {
+bool testForInt(string input) {   // Kokeilee onko käyttäjän syöte numero ja fiksu sellainen
+    if (input.length() == 0 || input.length() > 8) {
         return false;
     }
+    for (char c: input) {
+        if (isdigit(c)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 
@@ -90,8 +94,7 @@ void reservation() {  // Varausohjelmamme pihvi.
                 cin >> nightsInput;
 
                 if (testForInt(nightsInput)) {
-                    if (stoi(nightsInput) <= numberOfRooms & stoi(nightsInput) >=
-                                                             0) {         // Katsotaan onko syöte numero ja huoneiden lukumäärän välissä.
+                    if (stoi(nightsInput) > 0) {
                         roomNumber = getFirstAvailableRoom(1);
                         discount = randomizerWithMinMax(0, 2);
                         if (discount !=
@@ -120,7 +123,7 @@ void reservation() {  // Varausohjelmamme pihvi.
                 cout << "Montako yota haluaisit varata?" << endl;
                 cin >> nightsInput;
                 if (testForInt(nightsInput)) {
-                    if (stoi(nightsInput) <= numberOfRooms & stoi(nightsInput) >= 0) {
+                    if (stoi(nightsInput) <= numberOfRooms && stoi(nightsInput) > 0) {
                         roomNumber = getFirstAvailableRoom(2);
                         discount = randomizerWithMinMax(0, 2);
                         if (discount != 0) {
@@ -186,6 +189,7 @@ int main() {
     createRooms();
     cout << "Tervetuloa hotelli hevonbarse varausjarjestelmaan!" << endl;
     empty();
+
     cout << "Hotellissamme on " << numberOfRooms << " huonetta, joista puolet yhden ja puolet kahden hengen huoneita."
          << endl;
     empty();
@@ -194,7 +198,5 @@ int main() {
 
     empty();
     menu();
-
-
     cout << "Kiitos ja tervetuloa uudestaan!";
 }
