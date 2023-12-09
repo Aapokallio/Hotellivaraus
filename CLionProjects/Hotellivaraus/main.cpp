@@ -17,10 +17,10 @@ int randomizerWithMinMax(int min, int max) { //random generaattori joka arpoo ra
 }
 
 
-const int numberOfRooms = randomizerWithMinMax(1, 3) *  // Luodaan satunnainen määrä huoneita hotelliin väliltä 40 - 300
+const int numberOfRooms = randomizerWithMinMax(20,  150) *  // Luodaan satunnainen määrä huoneita hotelliin väliltä 40 - 300
                           2; // Lähetetään puolet halutusta ja tuplataan lopputulos saadaksemme parillisen luvun
 const int halfRooms = numberOfRooms / 2;
-vector<Room> rooms(numberOfRooms);
+vector<Room> rooms(numberOfRooms);  //Vektorimme, jossa säilömme huoneobjektejamme
 
 void empty() { // Printtaa tyhjä line
     cout << endl;
