@@ -6,7 +6,6 @@ using namespace std;
 
 struct Room {    //Objektimme huone
     int price;
-    int fitsPeople;
     bool available;
 };
 
@@ -183,11 +182,9 @@ void createRooms() {    // Luodaan huoneet
     for (int i = 1; i <= numberOfRooms; ++i) {
         if (i <= (numberOfRooms / 2)) {
             rooms[i].price = 100;
-            rooms[i].fitsPeople = 1;
             rooms[i].available = true;
         } else {
             rooms[i].price = 150;
-            rooms[i].fitsPeople = 2;
             rooms[i].available = true;
         }
     }
@@ -200,6 +197,7 @@ int main() {
 
     cout << "Hotellissamme on " << numberOfRooms << " huonetta, joista puolet yhden ja puolet kahden hengen huoneita."
          << endl;
+    cout << "Yhden hengen huoneen hinta on 100 euroa ja kahden hengen 150 euroa yolta" << endl;
     empty();
     cout << "Meilla on kaynnissa talla hetkella kampanja, jossa jarjestelmamme arpoo sinulle 0, 10% tai 20% alennuksen!"
          << endl;
