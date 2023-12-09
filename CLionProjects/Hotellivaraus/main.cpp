@@ -75,6 +75,26 @@ bool testForInt(string input) {   // Kokeilee onko käyttäjän syöte numero ja
     return false;
 }
 
+int randomizeRoom(int roomtype) {
+    int randomedNumber;
+    while (true) {
+        if (roomtype == 1) {
+            randomedNumber = randomizerWithMinMax(1, halfRooms);
+            if (rooms[randomedNumber].available) {
+                rooms[randomedNumber].available = false;
+                return randomedNumber;
+            }
+        }
+        if (roomtype == 2) {
+            randomedNumber = randomizerWithMinMax(halfRooms + 1, numberOfRooms);
+            if (rooms[randomedNumber].available) {
+                rooms[randomedNumber].available = false;
+                return randomedNumber;
+            }
+        }
+    }
+}
+
 
 void reservation() {  // Varausohjelmamme pihvi.
     string input;
@@ -95,7 +115,7 @@ void reservation() {  // Varausohjelmamme pihvi.
 
                 if (testForInt(nightsInput)) {
                     if (stoi(nightsInput) > 0) {
-                        roomNumber = getFirstAvailableRoom(1);
+                        roomNumber = randomizeRoom(1);
                         discount = randomizerWithMinMax(0, 2);
                         if (discount !=
                             0) {                                                     // Katsotaan saiko asiakas alennuksen ja lasketaan loppusumma sen mukaan.
@@ -124,7 +144,7 @@ void reservation() {  // Varausohjelmamme pihvi.
                 cin >> nightsInput;
                 if (testForInt(nightsInput)) {
                     if (stoi(nightsInput) <= numberOfRooms && stoi(nightsInput) > 0) {
-                        roomNumber = getFirstAvailableRoom(2);
+                        roomNumber = randomizeRoom(2);
                         discount = randomizerWithMinMax(0, 2);
                         if (discount != 0) {
                             price = calculatePrice(stoi(nightsInput), rooms[roomNumber].price, discount * 10);
