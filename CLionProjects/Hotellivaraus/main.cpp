@@ -95,7 +95,7 @@ void reservation() {  // Varausohjelmamme pihvi.
         cin >> input;
         empty();
 
-        if (input == "1") {
+        if (input == "1") { //Käyttäjän valitessa yhden hengen huoneen aletaan käydä läpi prosessia tarkistuksineen
             if (availabilityChecker(1)) {
                 cout << "Montako yota haluaisit varata?" << endl;
                 cin >> nightsInput;
@@ -125,6 +125,8 @@ void reservation() {  // Varausohjelmamme pihvi.
             } else {
                 cout << "Valitettavasti yhden hengen huoneita ei ole saatavilla!" << endl;
             }
+
+
         } else if (input == "2") {         // Samat kuin edellä, mutta kahden hengen huoneille.
             if (availabilityChecker(2)) {
                 cout << "Montako yota haluaisit varata?" << endl;
@@ -153,7 +155,9 @@ void reservation() {  // Varausohjelmamme pihvi.
             } else {
                 cout << "Valitettavasti kahden hengen huoneita ei ole saatavilla!" << endl;
             }
-        } else if (input == "3") {
+
+
+        } else if (input == "3") {  //"Backbutton"
             break;
         } else {
             cout << "Virheellinen syote!" << endl;
@@ -168,9 +172,9 @@ void menu() {      // Päävalikon eka menu
     while (true) {
         cout << "Syota haluamasi toiminto (1 = Varaa huone, 2 = lopeta ohjelman kaytto)" << endl;
         cin >> input;
-        if (input == "1") {
+        if (input == "1") { //siirrytään varaamisen pariin
             reservation();
-        } else if (input == "2") {
+        } else if (input == "2") { //lopetus
             break;
         } else {
             cout << "Virheellinen komento!" << endl;
@@ -178,7 +182,7 @@ void menu() {      // Päävalikon eka menu
     }
 }
 
-void createRooms() {    // Luodaan huoneet
+void createRooms() {    // Luodaan huoneet vectoriimme
     for (int i = 1; i <= numberOfRooms; ++i) {
         if (i <= (numberOfRooms / 2)) {
             rooms[i].price = 100;
