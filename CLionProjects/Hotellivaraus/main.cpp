@@ -16,7 +16,6 @@ int randomizerWithMinMax(int min, int max) { //random generaattori joka arpoo ra
     return distribution(generator);
 }
 
-
 const int numberOfRooms =
         randomizerWithMinMax(20, 150) *  // Luodaan satunnainen määrä huoneita hotelliin väliltä 40 - 300
         2; // Lähetetään puolet halutusta ja tuplataan lopputulos saadaksemme parillisen luvun
@@ -46,17 +45,6 @@ bool availabilityChecker(int roomtype) {  // Checkeri jolla selvitetään onko h
     }
 }
 
-int getFirstAvailableRoom(
-        int roomtype) {  // Käy läpi huoneet ja valitsee käyttäjälle ensimmäisen vapailla olevan sitä huonetyyppiä jota halutaan.
-    for (int i = 1; i <= numberOfRooms; ++i) {
-        if (rooms[i].fitsPeople == roomtype) {
-            if (rooms[i].available) {
-                rooms[i].available = false;
-                return i;
-            }
-        }
-    }
-}
 
 int calculatePrice(float nights, float price,
                    float discount) {  // Loppusumman laskuri tapauksessa, jossa on saatu alennusta.
@@ -75,7 +63,7 @@ bool testForInt(string input) {   // Kokeilee onko käyttäjän syöte numero ja
     return false;
 }
 
-int randomizeRoom(int roomtype) {
+int randomizeRoom(int roomtype) {  //Etsii käyttäjälle haluamansa tyyppisen satunnaisen huoneen.
     int randomedNumber;
     while (true) {
         if (roomtype == 1) {
@@ -143,7 +131,7 @@ void reservation() {  // Varausohjelmamme pihvi.
                 cout << "Montako yota haluaisit varata?" << endl;
                 cin >> nightsInput;
                 if (testForInt(nightsInput)) {
-                    if (stoi(nightsInput) <= numberOfRooms && stoi(nightsInput) > 0) {
+                    if (stoi(nightsInput) > 0) {
                         roomNumber = randomizeRoom(2);
                         discount = randomizerWithMinMax(0, 2);
                         if (discount != 0) {
