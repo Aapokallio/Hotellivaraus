@@ -4,7 +4,7 @@
 using namespace std;
 
 
-struct Room {
+struct Room {    //Objektimme huone
     int price;
     int fitsPeople;
     bool available;
@@ -17,11 +17,10 @@ int randomizerWithMinMax(int min, int max) { //random generaattori joka arpoo ra
 }
 
 
-const int numberOfRooms = randomizerWithMinMax(20, 150) *
+const int numberOfRooms = randomizerWithMinMax(1, 3) *  // Luodaan satunnainen määrä huoneita hotelliin väliltä 40 - 300
                           2; // Lähetetään puolet halutusta ja tuplataan lopputulos saadaksemme parillisen luvun
 const int halfRooms = numberOfRooms / 2;
 vector<Room> rooms(numberOfRooms);
-
 
 void empty() { // Printtaa tyhjä line
     cout << endl;
@@ -46,20 +45,104 @@ bool availabilityChecker(int roomtype) {  // checkeri jolla selvitetään onko h
     }
 }
 
-void reservation() {
+int getFirstAvailableRoom(
+        int roomtype) {  // Käy läpi huoneet ja valitsee käyttäjälle ensimmäisen vapailla olevan sitä huonetyyppiä jota halutaan.
+    for (int i = 1; i <= numberOfRooms; ++i) {
+        if (rooms[i].fitsPeople == roomtype) {
+            if (rooms[i].available) {
+                rooms[i].available = false;
+                return i;
+            }
+        }
+    }
+}
+
+int calculatePrice(float nights, float price,
+                   float discount) {  // Loppusumman laskuri tapauksessa, jossa on saatu alennusta.
+    return nights * price * (1 - (discount / 100));
+}
+
+bool testForInt(string input) {   // Kokeilee onko käyttäjän syöte numero
+    try {
+        stoi(input);
+        return true;
+    } catch (invalid_argument const &e) {
+        return false;
+    }
+}
+
+
+void reservation() {  // Varausohjelmamme pihvi.
     string input;
+    string nightsInput;
+    int roomNumber;
+    int price;
+    int discount;
 
     while (true) {
         cout << "Valitse halauamasi toiminto (1 = yhden hengen huone, 2 = kahden hengen huone, 3 = takaisin)" << endl;
         cin >> input;
-
         empty();
+
         if (input == "1") {
             if (availabilityChecker(1)) {
+                cout << "Montako yota haluaisit varata?" << endl;
+                cin >> nightsInput;
 
+                if (testForInt(nightsInput)) {
+                    if (stoi(nightsInput) <= numberOfRooms & stoi(nightsInput) >=
+                                                             0) {         // Katsotaan onko syöte numero ja huoneiden lukumäärän välissä.
+                        roomNumber = getFirstAvailableRoom(1);
+                        discount = randomizerWithMinMax(0, 2);
+                        if (discount !=
+                            0) {                                                     // Katsotaan saiko asiakas alennuksen ja lasketaan loppusumma sen mukaan.
+                            price = calculatePrice(stoi(nightsInput), rooms[roomNumber].price, discount * 10);
+                        } else {
+                            price = stoi(nightsInput) * rooms[roomNumber].price;
+                        }
+                        cout << "Huoneesi numero " << roomNumber << " on varattu " << stoi(nightsInput) << " yoksi."
+                             << endl;
+                        cout << "Sait " << discount * 10 << "% alennuksen ja loppusummasi on " << price << " euroa."
+                             << endl;
+                        cout << "Kiitos varauksesta! Viemme sinut takaisin etusivulle." << endl;
+                        empty();
+                    } else {
+                        cout << "Virheellinen syote, koita uudestaan!" << endl;
+                    }
+                } else {
+                    cout << "Virheellinen syote, koita uudestaan!" << endl;
+                }
+            } else {
+                cout << "Valitettavasti yhden hengen huoneita ei ole saatavilla!" << endl;
             }
-        } else if (input == "2") {
-            availabilityChecker(2);
+        } else if (input == "2") {         // Samat kuin edellä, mutta kahden hengen huoneille.
+            if (availabilityChecker(2)) {
+                cout << "Montako yota haluaisit varata?" << endl;
+                cin >> nightsInput;
+                if (testForInt(nightsInput)) {
+                    if (stoi(nightsInput) <= numberOfRooms & stoi(nightsInput) >= 0) {
+                        roomNumber = getFirstAvailableRoom(2);
+                        discount = randomizerWithMinMax(0, 2);
+                        if (discount != 0) {
+                            price = calculatePrice(stoi(nightsInput), rooms[roomNumber].price, discount * 10);
+                        } else {
+                            price = stoi(nightsInput) * rooms[roomNumber].price;
+                        }
+                        cout << "Huoneesi numero " << roomNumber << " on varattu " << stoi(nightsInput) << " yoksi."
+                             << endl;
+                        cout << "Sait " << discount * 10 << "% alennuksen ja loppusummasi on " << price << " euroa."
+                             << endl;
+                        cout << "Kiitos varauksesta! Viemme sinut takaisin etusivulle." << endl;
+                        empty();
+                    } else {
+                        cout << "Virheellinen syote, koita uudestaan!" << endl;
+                    }
+                } else {
+                    cout << "Virheellinen syote, koita uudestaan!" << endl;
+                }
+            } else {
+                cout << "Valitettavasti kahden hengen huoneita ei ole saatavilla!" << endl;
+            }
         } else if (input == "3") {
             break;
         } else {
@@ -70,7 +153,7 @@ void reservation() {
 }
 
 
-void menu() {
+void menu() {      // Päävalikon eka menu
     string input;
     while (true) {
         cout << "Syota haluamasi toiminto (1 = Varaa huone, 2 = lopeta ohjelman kaytto)" << endl;
@@ -85,8 +168,8 @@ void menu() {
     }
 }
 
-void createRooms(){
-    for (int i = 1; i <= numberOfRooms; ++i) {  // Luodaan huoneet
+void createRooms() {    // Luodaan huoneet
+    for (int i = 1; i <= numberOfRooms; ++i) {
         if (i <= (numberOfRooms / 2)) {
             rooms[i].price = 100;
             rooms[i].fitsPeople = 1;
@@ -108,8 +191,8 @@ int main() {
     empty();
     cout << "Meilla on kaynnissa talla hetkella kampanja, jossa jarjestelmamme arpoo sinulle 0, 10% tai 20% alennuksen!"
          << endl;
-    empty();
 
+    empty();
     menu();
 
 
